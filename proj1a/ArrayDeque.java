@@ -5,21 +5,22 @@ public class ArrayDeque<T> {
     private int nextLast;
 
     public ArrayDeque() {
-        items = (T[])new Object[8];
+        int x = 8;
+        items = (T[]) new Object[x];
         size = 0;
         nextFirst = 0;
         nextLast = 1;
     }
 
     public ArrayDeque(ArrayDeque other) {
-        items = (T[])other.items;
+        items = (T[]) other.items;
         size = other.size();
         nextFirst = other.nextFirst;
         nextLast = other.nextLast;
-        T[] temp = (T[])new Object[other.items.length];
+        T[] temp = (T[]) new Object[other.items.length];
         int tempFirst = other.realFirst(other.nextFirst);
         for (int i = 0; i < other.size(); i++) {
-            temp[tempFirst] = (T)other.items[tempFirst];
+            temp[tempFirst] = (T) other.items[tempFirst];
             tempFirst = firstBackward(tempFirst);
         }
         items = temp;
@@ -27,7 +28,7 @@ public class ArrayDeque<T> {
 
     private void resizeArray() {
         int originalSize = size();
-        T[] temp = (T[])new Object[items.length * 2];
+        T[] temp = (T[]) new Object[items.length * 2];
         int tempNextFirst = nextFirst;
         for (int i = 0; i < size; i++) {
             int tempIndex = realFirst(tempNextFirst);
@@ -59,11 +60,7 @@ public class ArrayDeque<T> {
     }
 
     public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return size == 0;
     }
 
     public int size() {

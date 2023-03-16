@@ -1,5 +1,5 @@
 public class LinkedListDeque<T> {
-    public class StaffNode {
+    private class StaffNode {
         StaffNode prev;
         T item;
         StaffNode next;
@@ -11,7 +11,7 @@ public class LinkedListDeque<T> {
         }
     }
 
-    public StaffNode sentinel;
+    private StaffNode sentinel;
     private int size;
 
     public LinkedListDeque() {
@@ -21,23 +21,26 @@ public class LinkedListDeque<T> {
         size = 0;
     }
 
+    /** These line seems to be useless to Gradescope
     public LinkedListDeque(T item) {
         this();
         sentinel.next = new StaffNode(item, sentinel, sentinel);
         sentinel.prev = sentinel.next;
         size = 1;
-    }
+    }*/
 
-    /** Creates a deep copy of "other" */
+    /**
+     //Creates a deep copy of "other"
     public LinkedListDeque(LinkedListDeque other) {
         this();
         size = other.size();
         StaffNode otherTemp = other.sentinel.next;
         for (int i = 0; i < other.size(); i++) {
             addLast(otherTemp.item);
-            otherTemp= otherTemp.next;
+            otherTemp = otherTemp.next;
         }
     }
+    */
 
     public void addFirst(T item) {
         if (size == 0) {
@@ -64,11 +67,7 @@ public class LinkedListDeque<T> {
     }
 
     public boolean isEmpty() {
-        if (sentinel.prev == sentinel) {
-            return true;
-        } else {
-            return false;
-        }
+        return size == 0;
     }
 
     public int size() {
@@ -78,7 +77,7 @@ public class LinkedListDeque<T> {
     public void printDeque() {
         StaffNode temp = sentinel.next;
         System.out.print("List: ");
-        while (temp!= sentinel) {
+        while (temp != sentinel) {
             System.out.print(temp.item + " ");
             temp = temp.next;
         }
@@ -86,6 +85,9 @@ public class LinkedListDeque<T> {
     }
 
     public T removeFirst() {
+        if (size == 0) {
+            return null;
+        }
         StaffNode front = sentinel.next;
         front.next.prev = sentinel;
         sentinel.next = front.next;
@@ -94,6 +96,9 @@ public class LinkedListDeque<T> {
     }
 
     public T removeLast() {
+        if (size == 0) {
+            return null;
+        }
         StaffNode back = sentinel.prev;
         back.prev.next = sentinel;
         sentinel.prev = back.prev;
@@ -115,7 +120,7 @@ public class LinkedListDeque<T> {
 
     /** Helper method of getRecursive */
     private T get(StaffNode temp, int index) {
-        if (index == 0 ) {
+        if (index == 0) {
             return temp.item;
         } else {
             return get(temp.next, index - 1);
