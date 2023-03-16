@@ -12,6 +12,7 @@ public class ArrayDeque<T> {
         nextLast = 1;
     }
 
+    /*
     public ArrayDeque(ArrayDeque other) {
         items = (T[]) other.items;
         size = other.size();
@@ -25,6 +26,7 @@ public class ArrayDeque<T> {
         }
         items = temp;
     }
+    */
 
     private void resizeArray() {
         int originalSize = size();

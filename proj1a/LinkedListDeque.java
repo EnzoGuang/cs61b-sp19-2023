@@ -132,3 +132,4 @@ public class LinkedListDeque<T> {
         return get(sentinel.next, index);
     }
 }
+
