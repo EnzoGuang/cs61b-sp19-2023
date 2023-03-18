@@ -49,6 +49,9 @@ public class IntList {
      * If given null as an input, returns null
      */
     public static IntList reverse(IntList A) {
+        if (A == null || A.rest == null) {
+            return null;
+        }
         IntList temp = A.rest;
         A.rest = null;
         while (temp != null) {
