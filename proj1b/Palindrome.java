@@ -27,7 +27,7 @@ public class Palindrome {
         char[] test1 = word.toCharArray();
         for (int i = 0; i < test1.length / 2; i++) {
             boolean temp = cc.equalChars(test1[i], test1[test1.length - 1 - i]);
-            if (temp == false) {
+            if (!temp) {
                 return false;
             }
         }
