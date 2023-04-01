@@ -6,9 +6,9 @@ import huglife.Action;
 import huglife.Occupant;
 
 import java.awt.Color;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.Map;
+import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * An implementation of a motile pacifist photosynthesizer.
@@ -29,6 +29,8 @@ public class Plip extends Creature {
      * blue color.
      */
     private int b;
+
+    //private double moveProbility = 0;
 
     /**
      * creates plip with energy equal to E.
@@ -56,14 +58,16 @@ public class Plip extends Creature {
      * linearly in between these two extremes. It's not absolutely vital
      * that you get this exactly correct.
      */
+    @Override
     public Color color() {
         g = 63;
-        return color(r, g, b);
+        return color(r + 99, 96 * (int) energy + g, b + 76);
     }
 
     /**
      * Do nothing with C, Plips are pacifists.
      */
+    @Override
     public void attack(Creature c) {
         // do nothing.
     }
@@ -73,16 +77,24 @@ public class Plip extends Creature {
      * to avoid the magic number warning, you'll need to make a
      * private static final variable. This is not required for this lab.
      */
+    @Override
     public void move() {
-        // TODO
+        energy -= 0.15;
+        if (energy < 0) {
+            energy = 0;
+        }
     }
 
 
     /**
      * Plips gain 0.2 energy when staying due to photosynthesis.
      */
+    @Override
     public void stay() {
-        // TODO
+        energy += 0.2;
+        if (energy > 2) {
+            energy = 2;
+        }
     }
 
     /**
@@ -90,8 +102,10 @@ public class Plip extends Creature {
      * lost to the process. Now that's efficiency! Returns a baby
      * Plip.
      */
+    @Override
     public Plip replicate() {
-        return this;
+        energy *= 0.5;
+        return new Plip(this.energy);
     }
 
     /**
@@ -107,24 +121,52 @@ public class Plip extends Creature {
      * scoop on how Actions work. See SampleCreature.chooseAction()
      * for an example to follow.
      */
+    @Override
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
         // Rule 1
-        Deque<Direction> emptyNeighbors = new ArrayDeque<>();
+        //Deque<Direction> emptyNeighbors = new ArrayDeque<>();
+        ArrayList<Direction> emptyNeighbors = new ArrayList<>();
         boolean anyClorus = false;
-        // TODO
-        // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
-
-        if (false) { // FIXME
-            // TODO
+        /* (Google: Enhanced for-loop over keys of NEIGHBORS?) */
+        boolean notEmpty = true;
+        int emptySize = 0;
+        for (Map.Entry<Direction, Occupant> entry: neighbors.entrySet()) {
+            boolean isEqualsEmpty = entry.getValue().name().equals("empty");
+            boolean isAnyClorus = entry.getValue().name().equals("clorus");
+            if (isEqualsEmpty) {
+                emptySize++;
+            }
+            if (isAnyClorus) {
+                anyClorus = true;
+            }
+            if (isEqualsEmpty && !isAnyClorus) {
+                emptyNeighbors.add(entry.getKey());
+            }
         }
-
+        if (emptySize == 0) {
+            return new Action(Action.ActionType.STAY);
+        } else if (this.energy >= 1.0) {
+            Random random = new Random();
+            int randomIndex = random.nextInt(emptyNeighbors.size());
+            return new Action(Action.ActionType.REPLICATE, emptyNeighbors.get(randomIndex));
+        } else if (anyClorus) {
+            Random random = new Random();
+            double ratio = random.nextDouble();
+            int randomIndex = random.nextInt(emptyNeighbors.size());
+            if (ratio > 0.5) {
+                return new Action(Action.ActionType.STAY);
+            } else {
+                return new Action(Action.ActionType.MOVE, emptyNeighbors.get(randomIndex));
+            }
+        } else {
+            return new Action(Action.ActionType.STAY);
+        }
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
 
         // Rule 3
 
         // Rule 4
-        return new Action(Action.ActionType.STAY);
+        //return new Action(Action.ActionType.STAY);
     }
 }
